@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="spring基于XMl的依赖注入">
+<meta property="og:type" content="article">
+<meta property="og:title" content="spring基于XMl的依赖注入">
+<meta property="og:url" content="http://example.com/2021/03/16/spring%E5%9F%BA%E4%BA%8EXMl%E7%9A%84%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="spring基于XMl的依赖注入">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/image/spring%E5%9F%BA%E4%BA%8EXMl%E7%9A%84%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/1.png">
+<meta property="og:image" content="http://example.com/image/spring%E5%9F%BA%E4%BA%8EXMl%E7%9A%84%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/1.png">
+<meta property="og:image" content="http://example.com/image/spring%E5%9F%BA%E4%BA%8EXMl%E7%9A%84%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/2.png">
+<meta property="article:published_time" content="2021-03-16T13:10:14.000Z">
+<meta property="article:modified_time" content="2021-03-16T13:36:44.268Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/image/spring%E5%9F%BA%E4%BA%8EXMl%E7%9A%84%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/1.png">
+
+<link rel="canonical" href="http://example.com/2021/03/16/spring%E5%9F%BA%E4%BA%8EXMl%E7%9A%84%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>spring基于XMl的依赖注入 | Hexo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hexo</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/16/spring%E5%9F%BA%E4%BA%8EXMl%E7%9A%84%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          spring基于XMl的依赖注入
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-03-16 21:10:14 / Modified: 21:36:44" itemprop="dateCreated datePublished" datetime="2021-03-16T21:10:14+08:00">2021-03-16</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="spring基于XMl的依赖注入"><a href="#spring基于XMl的依赖注入" class="headerlink" title="spring基于XMl的依赖注入"></a>spring基于XMl的依赖注入</h1><a id="more"></a>
+
+<p>依赖注入：<br>                能注入的数据：有三类<br>                    基本类型和String<br>                    其他bean类型（在配置文件中或者注解配置过的bean）<br>                    复杂类型/集合类型<br>                注入方式：有三种<br>                    第一种：使用构造函数提供<br>                    第二种：使用set方法提供<br>                    第三种：使用注解提供</p>
+<h2 id="一-使用构造函数注入"><a href="#一-使用构造函数注入" class="headerlink" title="一.使用构造函数注入"></a>一.使用构造函数注入</h2><p>使用的标签：constructor-arg<br>         标签出现的位置：bean标签的内部<br>         标签中的属性：<br>                type：用于指定要注入数据的数据类型，该数据类型也是构造函数中某个或某些参数的类型<br>                index：用于指定要注入的数据给构造函数中指定索引位置的参数赋值。索引的位置是从0开始的<br>                name：用于指定给构造函数中指定名称的参数赋值                                             常用<br>                ==========================以上是三个用于指定给构造函数中哪个参数赋值==============================<br>                value：用于提供基本类型和String类型的数据<br>                ref：用于指定其他的bean类型数据。它指的就是在spring的Ioc容器中出现过的bean对象</p>
+<p><strong>例</strong>：</p>
+<p>在实现类中定义一些变量，并创建构造函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public class AccountService_impl implements IAccountService &#123;</span><br><span class="line">    &#x2F;&#x2F;如果是经常变化的数据，并不使用构造函数注入</span><br><span class="line">    private Integer a;</span><br><span class="line">    private String b;</span><br><span class="line">    private Date c;</span><br><span class="line"></span><br><span class="line">    public AccountService_impl(Integer a, String b, Date c)&#123;</span><br><span class="line">        this.a &#x3D; a;</span><br><span class="line">        this.b &#x3D; b;</span><br><span class="line">        this.c &#x3D; c;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void saveAccount() &#123;</span><br><span class="line">        System.out.println(&quot;执行成功：&quot;+b+&quot;,&quot;+a+&quot;,&quot;+c);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在bean.xml中配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;bean id&#x3D;&quot;AccountService_impl&quot; class&#x3D;&quot;service.impl.AccountService_impl&quot;&gt;</span><br><span class="line">    &lt;constructor-arg name&#x3D;&quot;a&quot; value&#x3D;&quot;18&quot;&gt;&lt;&#x2F;constructor-arg&gt;</span><br><span class="line">    &lt;constructor-arg name&#x3D;&quot;b&quot; value&#x3D;&quot;赖永俊&quot;&gt;&lt;&#x2F;constructor-arg&gt;</span><br><span class="line">    &lt;constructor-arg name&#x3D;&quot;c&quot; ref&#x3D;&quot;now&quot;&gt;&lt;&#x2F;constructor-arg&gt;</span><br><span class="line">&lt;&#x2F;bean&gt;</span><br></pre></td></tr></table></figure>
+<p>调用saveAccount()方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class saveAccount &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        ApplicationContext ac &#x3D; new ClassPathXmlApplicationContext(&quot;bean.xml&quot;);</span><br><span class="line">        IAccountService accountService_impl &#x3D; ac.getBean(&quot;AccountService_impl&quot;, IAccountService.class);</span><br><span class="line"></span><br><span class="line">        accountService_impl.saveAccount();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="运行结果"><a href="#运行结果" class="headerlink" title="运行结果"></a>运行结果</h3><p><img src="/image/spring%E5%9F%BA%E4%BA%8EXMl%E7%9A%84%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/1.png"></p>
+<h3 id="优势："><a href="#优势：" class="headerlink" title="优势："></a>优势：</h3><p>​            在获取bean对象时，注入数据时必须的操作，否则对象无法创建成功。</p>
+<h3 id="弊端："><a href="#弊端：" class="headerlink" title="弊端："></a>弊端：</h3><p>​            改变了bean对象的实例化方式，使我们在创建对象时，如果用不到这些数据，也必须提供</p>
+<h2 id="二-使用set方法注入"><a href="#二-使用set方法注入" class="headerlink" title="二.使用set方法注入"></a>二.使用set方法注入</h2><p>set方法注入        更常用的方式<br>        涉及的标签：properties<br>        出现的位置：bean标签内部<br>        标签的属性：<br>            name：用于指定注入时所调用的set方法名称<br>            value：用于提供基本类型和String类型的数据<br>            ref：用于指定其他的bean类型数据。它指的就是在spring的Ioc容器中出现过的bean对象</p>
+<p><strong>例</strong>：</p>
+<p>在实现类中定义一些变量，并创建set方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">public class AccountService_impl2 implements IAccountService &#123;</span><br><span class="line">    private Integer a;</span><br><span class="line">    private String b;</span><br><span class="line">    private Date c;</span><br><span class="line"></span><br><span class="line">    public void setA(Integer a) &#123;</span><br><span class="line">        this.a &#x3D; a;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setB(String b) &#123;</span><br><span class="line">        this.b &#x3D; b;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setC(Date c) &#123;</span><br><span class="line">        this.c &#x3D; c;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void saveAccount() &#123;</span><br><span class="line">        System.out.println(&quot;执行成功：&quot;+b+&quot;,&quot;+a+&quot;,&quot;+c);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在bean.xml中配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;bean id&#x3D;&quot;AccountService_impl2&quot; class&#x3D;&quot;service.impl.AccountService_impl2&quot;&gt;</span><br><span class="line">    &lt;property name&#x3D;&quot;a&quot; value&#x3D;&quot;18&quot;&gt;&lt;&#x2F;property&gt;</span><br><span class="line">    &lt;property name&#x3D;&quot;b&quot; value&#x3D;&quot;赖永俊&quot;&gt;&lt;&#x2F;property&gt;</span><br><span class="line">    &lt;property name&#x3D;&quot;c&quot; ref&#x3D;&quot;now&quot;&gt;&lt;&#x2F;property&gt;</span><br><span class="line">&lt;&#x2F;bean&gt;</span><br><span class="line"></span><br><span class="line">&lt;bean id&#x3D;&quot;now&quot; class&#x3D;&quot;java.util.Date&quot;&gt;&lt;&#x2F;bean&gt;</span><br></pre></td></tr></table></figure>
+<p>调用saveAccount()方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class saveAccount &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        ApplicationContext ac &#x3D; new ClassPathXmlApplicationContext(&quot;bean.xml&quot;);</span><br><span class="line"></span><br><span class="line">        IAccountService accountService_impl2 &#x3D; ac.getBean(&quot;AccountService_impl2&quot;, IAccountService.class);</span><br><span class="line">        </span><br><span class="line">        accountService_impl2.saveAccount();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="运行结果-1"><a href="#运行结果-1" class="headerlink" title="运行结果"></a>运行结果</h3><p><img src="/image/spring%E5%9F%BA%E4%BA%8EXMl%E7%9A%84%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/1.png"></p>
+<h3 id="优势：-1"><a href="#优势：-1" class="headerlink" title="优势："></a>优势：</h3><p>​            创建对象时，没有明确的限制，可以直接使用默认构造函数</p>
+<h3 id="弊端：-1"><a href="#弊端：-1" class="headerlink" title="弊端："></a>弊端：</h3><p>​            如果有某个成员必须有值，则获取对象时有可能set方法没有执行</p>
+<h2 id="三-复杂类型的注入-集合类型的注入"><a href="#三-复杂类型的注入-集合类型的注入" class="headerlink" title="三.复杂类型的注入/集合类型的注入"></a>三.复杂类型的注入/集合类型的注入</h2><p>用于给List结构集合注入的标签：<br>            list array set<br>        用于给Map结构集合注入的标签：<br>            map props<br>        结构相同，标签可以互换</p>
+<p><strong>例：</strong></p>
+<p>在实现类中定义一些数组和集合，并创建set方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">public class AccountService_impl3 implements IAccountService &#123;</span><br><span class="line">    private String[] myStrs;</span><br><span class="line">    private List&lt;String&gt; myList;</span><br><span class="line">    private Set&lt;String&gt; mySet;</span><br><span class="line">    private Map&lt;String,String&gt; myMap;</span><br><span class="line">    private Properties myProps;</span><br><span class="line"></span><br><span class="line">    public void setMyStrs(String[] myStrs) &#123;</span><br><span class="line">        this.myStrs &#x3D; myStrs;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setMyList(List&lt;String&gt; myList) &#123;</span><br><span class="line">        this.myList &#x3D; myList;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setMySet(Set&lt;String&gt; mySets) &#123;</span><br><span class="line">        this.mySet &#x3D; mySets;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setMyMap(Map&lt;String, String&gt; myMap) &#123;</span><br><span class="line">        this.myMap &#x3D; myMap;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setMyProps(Properties myProps) &#123;</span><br><span class="line">        this.myProps &#x3D; myProps;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void saveAccount() &#123;</span><br><span class="line">        System.out.println(Arrays.toString(myStrs));</span><br><span class="line">        System.out.println(myList);</span><br><span class="line">        System.out.println(mySet);</span><br><span class="line">        System.out.println(myMap);</span><br><span class="line">        System.out.println(myProps);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在bean.xml中配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">&lt;bean id&#x3D;&quot;AccountService_impl3&quot; class&#x3D;&quot;service.impl.AccountService_impl3&quot;&gt;</span><br><span class="line">    &lt;property name&#x3D;&quot;myStrs&quot;&gt;</span><br><span class="line">        &lt;array&gt;</span><br><span class="line">            &lt;value&gt;赖永俊&lt;&#x2F;value&gt;</span><br><span class="line">            &lt;value&gt;流氓周&lt;&#x2F;value&gt;</span><br><span class="line">            &lt;value&gt;谢特伟&lt;&#x2F;value&gt;</span><br><span class="line">        &lt;&#x2F;array&gt;</span><br><span class="line">    &lt;&#x2F;property&gt;</span><br><span class="line">    &lt;property name&#x3D;&quot;myList&quot;&gt;</span><br><span class="line">        &lt;list&gt;</span><br><span class="line">            &lt;value&gt;111&lt;&#x2F;value&gt;</span><br><span class="line">            &lt;value&gt;222&lt;&#x2F;value&gt;</span><br><span class="line">            &lt;value&gt;333&lt;&#x2F;value&gt;</span><br><span class="line">        &lt;&#x2F;list&gt;</span><br><span class="line">    &lt;&#x2F;property&gt;</span><br><span class="line">    &lt;property name&#x3D;&quot;mySet&quot;&gt;</span><br><span class="line">        &lt;set&gt;</span><br><span class="line">            &lt;value&gt;111&lt;&#x2F;value&gt;</span><br><span class="line">            &lt;value&gt;222&lt;&#x2F;value&gt;</span><br><span class="line">            &lt;value&gt;333&lt;&#x2F;value&gt;</span><br><span class="line">        &lt;&#x2F;set&gt;</span><br><span class="line">    &lt;&#x2F;property&gt;</span><br><span class="line">    &lt;property name&#x3D;&quot;myMap&quot;&gt;</span><br><span class="line">        &lt;map&gt;</span><br><span class="line">            &lt;entry key&#x3D;&quot;one&quot; value&#x3D;&quot;赖永俊&quot;&gt;&lt;&#x2F;entry&gt;</span><br><span class="line">            &lt;entry key&#x3D;&quot;two&quot; value&#x3D;&quot;流氓周&quot;&gt;&lt;&#x2F;entry&gt;</span><br><span class="line">            &lt;entry key&#x3D;&quot;three&quot; value&#x3D;&quot;谢特伟&quot;&gt;&lt;&#x2F;entry&gt;</span><br><span class="line">        &lt;&#x2F;map&gt;</span><br><span class="line">    &lt;&#x2F;property&gt;</span><br><span class="line">    &lt;property name&#x3D;&quot;myProps&quot;&gt;</span><br><span class="line">        &lt;props&gt;</span><br><span class="line">            &lt;prop key&#x3D;&quot;one&quot;&gt;赖永俊&lt;&#x2F;prop&gt;</span><br><span class="line">            &lt;prop key&#x3D;&quot;two&quot;&gt;流氓周&lt;&#x2F;prop&gt;</span><br><span class="line">            &lt;prop key&#x3D;&quot;three&quot;&gt;谢特伟&lt;&#x2F;prop&gt;</span><br><span class="line">        &lt;&#x2F;props&gt;</span><br><span class="line">    &lt;&#x2F;property&gt;</span><br><span class="line">&lt;&#x2F;bean&gt;</span><br></pre></td></tr></table></figure>
+<p>调用saveAccount()方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class saveAccount &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        ApplicationContext ac &#x3D; new ClassPathXmlApplicationContext(&quot;bean.xml&quot;);</span><br><span class="line"></span><br><span class="line">        IAccountService accountService_impl3 &#x3D; ac.getBean(&quot;AccountService_impl3&quot;, IAccountService.class);</span><br><span class="line">        </span><br><span class="line">        accountService_impl3.saveAccount();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="运行结果-2"><a href="#运行结果-2" class="headerlink" title="运行结果"></a>运行结果</h3><p><img src="/image/spring%E5%9F%BA%E4%BA%8EXMl%E7%9A%84%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/2.png"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/03/15/spring%E5%88%9B%E5%BB%BAbean%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F/" rel="prev" title="spring创建bean的三种方式">
+      <i class="fa fa-chevron-left"></i> spring创建bean的三种方式
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#spring%E5%9F%BA%E4%BA%8EXMl%E7%9A%84%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5"><span class="nav-number">1.</span> <span class="nav-text">spring基于XMl的依赖注入</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80-%E4%BD%BF%E7%94%A8%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E6%B3%A8%E5%85%A5"><span class="nav-number">1.1.</span> <span class="nav-text">一.使用构造函数注入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E7%BB%93%E6%9E%9C"><span class="nav-number">1.1.1.</span> <span class="nav-text">运行结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%8A%BF%EF%BC%9A"><span class="nav-number">1.1.2.</span> <span class="nav-text">优势：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%8A%E7%AB%AF%EF%BC%9A"><span class="nav-number">1.1.3.</span> <span class="nav-text">弊端：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C-%E4%BD%BF%E7%94%A8set%E6%96%B9%E6%B3%95%E6%B3%A8%E5%85%A5"><span class="nav-number">1.2.</span> <span class="nav-text">二.使用set方法注入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E7%BB%93%E6%9E%9C-1"><span class="nav-number">1.2.1.</span> <span class="nav-text">运行结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%8A%BF%EF%BC%9A-1"><span class="nav-number">1.2.2.</span> <span class="nav-text">优势：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%8A%E7%AB%AF%EF%BC%9A-1"><span class="nav-number">1.2.3.</span> <span class="nav-text">弊端：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89-%E5%A4%8D%E6%9D%82%E7%B1%BB%E5%9E%8B%E7%9A%84%E6%B3%A8%E5%85%A5-%E9%9B%86%E5%90%88%E7%B1%BB%E5%9E%8B%E7%9A%84%E6%B3%A8%E5%85%A5"><span class="nav-number">1.3.</span> <span class="nav-text">三.复杂类型的注入&#x2F;集合类型的注入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E7%BB%93%E6%9E%9C-2"><span class="nav-number">1.3.1.</span> <span class="nav-text">运行结果</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/three-waves.min.js"></script>
+    <script defer src="/lib/three/canvas_lines.min.js"></script>
+    <script defer src="/lib/three/canvas_sphere.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"left","width":300,"height":500},"mobile":{"show":true},"react":{"opacity":0.7}});</script></body>
+</html>
