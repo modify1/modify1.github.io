@@ -401,4 +401,11 @@
 <h4 id="环绕通知配置成功"><a href="#环绕通知配置成功" class="headerlink" title="环绕通知配置成功"></a>环绕通知配置成功</h4><p>可见环绕通知的好处，它简化了书写步骤，并且让我们可以在代码中手动控制增强方法何时执行的方式。</p>
 ]]></content>
   </entry>
+  <entry>
+    <title>项目开发</title>
+    <url>/2021/04/24/%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91/</url>
+    <content><![CDATA[<h1 id="项目开发"><a href="#项目开发" class="headerlink" title="项目开发"></a>项目开发</h1><a id="more"></a>
+
+<h2 id="1-划分目录结构"><a href="#1-划分目录结构" class="headerlink" title="1.划分目录结构"></a>1.划分目录结构</h2><h2 id="2-引用了两个css文件"><a href="#2-引用了两个css文件" class="headerlink" title="2.引用了两个css文件"></a>2.引用了两个css文件</h2><h2 id="3-vue-config和-editorconfig"><a href="#3-vue-config和-editorconfig" class="headerlink" title="3.vue.config和.editorconfig"></a>3.vue.config和.editorconfig</h2><h2 id="4-项目的模块划分：tabbar-gt-路由映射关系"><a href="#4-项目的模块划分：tabbar-gt-路由映射关系" class="headerlink" title="4.项目的模块划分：tabbar -&gt; 路由映射关系"></a>4.项目的模块划分：tabbar -&gt; 路由映射关系</h2><h2 id="5-首页开发"><a href="#5-首页开发" class="headerlink" title="5.首页开发"></a>5.首页开发</h2><h3 id="·-navbar的封装"><a href="#·-navbar的封装" class="headerlink" title="· navbar的封装"></a>· navbar的封装</h3><h3 id="·-网络数据的请求"><a href="#·-网络数据的请求" class="headerlink" title="· 网络数据的请求"></a>· 网络数据的请求</h3><h3 id="·-swiper轮播图的封装"><a href="#·-swiper轮播图的封装" class="headerlink" title="· swiper轮播图的封装"></a>· swiper轮播图的封装</h3><h3 id="·-recommend推荐栏的封装"><a href="#·-recommend推荐栏的封装" class="headerlink" title="· recommend推荐栏的封装"></a>· recommend推荐栏的封装</h3>]]></content>
+  </entry>
 </search>
